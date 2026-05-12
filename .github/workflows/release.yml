@@ -20,13 +20,13 @@ jobs:
 
       - name: Publish to VS Code Marketplace
         env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
-        run: vsce publish -p $VSCE_PAT
+          AZURE_DEVOPS_PAT_FOR_VSCE: ${{ secrets.AZURE_DEVOPS_PAT_FOR_VSCE }}
+        run: vsce publish -p $AZURE_DEVOPS_PAT_FOR_VSCE
 
       - name: Publish to OpenVSX (Cursor)
         env:
-          OVSX_PAT: ${{ secrets.OPEN_VSX_PAW }}
-        run: ovsx publish -p $OVSX_PAT
+          OPENVSX_PAT: ${{ secrets.OPENVSX_PAT }}
+        run: ovsx publish -p $OPENVSX_PAT
 
       - name: Upload VSIX to Release
         run: |

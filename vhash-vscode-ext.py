@@ -374,8 +374,17 @@ class App(functocli.BaseCliApp):
         self.uninstall()
         self.setup_all_profiles()
 
-    def publish_openvsx(self, vsix_path=None):
-        token = self.app.read_secrets(['OPEN_VSX_PAW'])['OPEN_VSX_PAW']
+    def publish_for_vscode(self, vsix_path=None):
+        gcontext.try_enable_framework_mode()
+        token = gcontext.env_config.required_str('AZURE_DEVOPS_PAT_FOR_VSCE')
+        cmd = f'npx @vscode/vsce publish -p {token}'
+        if vsix_path:
+            cmd += f' --packagePath {vsix_path}'
+        self._run(cmd)
+
+    def publish_for_cursor(self, vsix_path=None):
+        gcontext.try_enable_framework_mode()
+        token = gcontext.env_config.required_str('OPENVSX_PAT')
         cmd = f'npx ovsx publish -p {token}'
         if vsix_path:
             cmd += f' {vsix_path}'
