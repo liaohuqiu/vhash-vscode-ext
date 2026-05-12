@@ -1,0 +1,36 @@
+name: Release Extension
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm install
+      - run: npm install -g @vscode/vsce ovsx
+
+      - name: Publish to VS Code Marketplace
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: vsce publish -p $VSCE_PAT
+
+      - name: Publish to OpenVSX (Cursor)
+        env:
+          OVSX_PAT: ${{ secrets.OPEN_VSX_PAW }}
+        run: ovsx publish -p $OVSX_PAT
+
+      - name: Upload VSIX to Release
+        run: |
+          VSIX=$(ls *.vsix | head -1)
+          gh release upload "$GITHUB_REF_NAME" "$VSIX" --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

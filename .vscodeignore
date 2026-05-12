@@ -1,0 +1,12 @@
+.env
+node_modules/
+src/
+.vscode/
+*.map
+*.ts
+.omc/
+__pycache__/
+.github/
+vhash-vscode-ext.py
+.gitignore
+.DS_Store
