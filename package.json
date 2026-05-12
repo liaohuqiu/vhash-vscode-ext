@@ -1,7 +1,8 @@
 {
   "name": "vhash-vscode-ext-v1",
-  "displayName": "vHash Tools",
-  "version": "0.0.8",
+  "displayName": "vHash",
+  "description": "vHash Tools",
+  "version": "0.0.7",
   "publisher": "vHash",
   "repository": {
     "type": "git",

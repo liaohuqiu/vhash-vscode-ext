@@ -85,7 +85,19 @@
 
 ## 发布 Token
 
+Token 写入 `~/.config/cpbox/cpbox-user.env`（用户级配置，不提交到仓库）：
+
+```
+AZURE_DEVOPS_PAT_FOR_VSCE=<your-azure-pat>
+OPENVSX_PAT=<your-openvsx-pat>
+```
+
 | 名称 | 用途 | 获取地址 |
 |---|---|---|
 | `AZURE_DEVOPS_PAT_FOR_VSCE` | VS Code Marketplace 发布 | https://dev.azure.com/liaohuqiu/_usersSettings/tokens |
 | `OPENVSX_PAT` | OpenVSX (Cursor) 发布 | https://open-vsx.org/user-settings/tokens |
+
+## 发布注意事项
+
+- `displayName` 在 VS Code Marketplace 被占用时无法发布（已验证 "vHash Tools" 已被占用），保持 `displayName` 为 `vHash`。
+- 运行发布命令需设置 `PYTHONPATH=/Users/liaohuqiu/git/vhash/cpbox/src:$PYTHONPATH`。

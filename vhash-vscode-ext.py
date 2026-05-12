@@ -12,6 +12,7 @@ import subprocess
 import time
 from pathlib import Path
 
+from cpbox.app.rootcontext import gcontext
 from cpbox.tool import functocli
 from cpbox.tool import serde
 
