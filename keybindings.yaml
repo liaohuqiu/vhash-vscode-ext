@@ -1,6 +1,6 @@
 # VHash Tools 快捷键配置（YAML 格式）
-# 此文件用于记录和管理自定义快捷键绑定
-# 安装扩展时会自动将这些绑定写入 Cursor/VS Code 的 keybindings.json
+# 此文件为 user 级设置，会覆盖 Cursor/VS Code 的系统默认快捷键
+# 安装扩展时会自动将这些绑定写入 keybindings.json
 
 - key: shift+cmd+e
   command: workbench.files.action.showActiveFileInExplorer
@@ -11,13 +11,8 @@
   # 全局搜索
 
 - key: shift+cmd+o
-  command: -workbench.action.gotoSymbol
-  when: editorTextFocus
-  # 禁用默认的符号跳转快捷键
-
-- key: shift+cmd+o
   command: workbench.action.quickOpen
-  # 快速打开文件
+  # 快速打开文件（覆盖默认的符号跳转）
 
 - key: shift+cmd+[
   command: workbench.action.previousEditor
@@ -31,4 +26,3 @@
   command: copyFilePath
   when: "!editorFocus"
   # 非编辑区时复制文件路径
-
