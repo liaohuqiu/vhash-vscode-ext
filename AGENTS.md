@@ -100,4 +100,3 @@ OPENVSX_PAT=<your-openvsx-pat>
 ## 发布注意事项
 
 - `displayName` 在 VS Code Marketplace 被占用时无法发布（已验证 "vHash Tools" 已被占用），保持 `displayName` 为 `vHash`。
-- 运行发布命令需设置 `PYTHONPATH=/Users/liaohuqiu/git/vhash/cpbox/src:$PYTHONPATH`。
