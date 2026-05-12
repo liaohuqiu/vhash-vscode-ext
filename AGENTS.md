@@ -99,4 +99,9 @@ OPENVSX_PAT=<your-openvsx-pat>
 
 ## 发布注意事项
 
-- `displayName` 在 VS Code Marketplace 被占用时无法发布（已验证 "vHash Tools" 已被占用），保持 `displayName` 为 `vHash`。
+- VS Code Marketplace 会永久保留 extension `name` 和 `displayName`，即使 unpublish + delete 后也无法再次使用。
+  - 已保留不可用的 name：`vhash-vscode-ext`、`vhash-vscode-ext-v1`
+  - 已保留不可用的 displayName：`vHash`、`vHash Tools`
+  - 当前 VS Marketplace 使用 name `vhash-vscode-ext-v2`，displayName `vHash Copy Path`
+- Cursor (OpenVSX) 无此限制，当前使用 name `vhash-vscode-ext-v1`，displayName `vHash Tools`
+- 图标使用 terminal 风格的 icon-08（`$ _vH`），已替换为 `icon.png`
