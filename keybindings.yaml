@@ -32,7 +32,3 @@
   when: "!editorFocus"
   # 非编辑区时复制文件路径
 
-- key: alt+cmd+c
-  command: -copyFilePath
-  when: "!editorFocus"
-  # 禁用默认的复制路径快捷键（让出给扩展命令）

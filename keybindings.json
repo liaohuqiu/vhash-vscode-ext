@@ -40,11 +40,5 @@
     "key": "shift+cmd+c",
     "command": "copyFilePath",
     "when": "!editorFocus"
-  },
-  {
-    // 禁用默认的复制路径快捷键（让出给扩展命令）
-    "key": "alt+cmd+c",
-    "command": "-copyFilePath",
-    "when": "!editorFocus"
   }
 ]

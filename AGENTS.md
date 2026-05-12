@@ -35,53 +35,7 @@
 
 ## keybinding
 
-- `Shift+Cmd+P`：open command palette
-
-```
-- `Shift+Cmd+E`：show explorer
-{
-  "key": "shift+cmd+e",
-  "command": "workbench.view.explorer",
-}
-
-- `Option+F`：search
-{
-  "key": "alt+f",
-  "command": "workbench.action.findInFiles"
-}
-- `Shift+Cmd+O`：open files
-{
-  "key": "shift+cmd+o",
-  "command": "-workbench.action.gotoSymbol",
-  "when": "editorTextFocus"
-}
-{
-  "key": "shift+cmd+o",
-  "command": "workbench.action.quickOpen"
-}
-
-- `Shift+Cmd+[`：left tab
-{
-  "key": "shift+cmd+[",
-  "command": "workbench.action.previousEditor"
-}
-- `Shift+Cmd+]`：right tab
-{
-  "key": "shift+cmd+]",
-  "command": "workbench.action.nextEditor"
-}
-- `Shift+Cmd+C`：copy path
-{
-  "key": "shift+cmd+c",
-  "command": "copyFilePath",
-  "when": "!editorFocus"
-}
-{
-  "key": "alt+cmd+c",
-  "command": "-copyFilePath",
-  "when": "!editorFocus"
-}
-```
+自定义快捷键列表见 `keybindings.yaml`（易读）或 `keybindings.json`（可直接用于 Cursor/VS Code 的 keybindings.json），安装扩展时会自动导入。
 
 ## 发布 Token
 
