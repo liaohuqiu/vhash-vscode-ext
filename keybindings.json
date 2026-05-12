@@ -1,0 +1,50 @@
+// VHash Tools 快捷键配置（JSONC 格式）
+// 此文件用于记录和管理自定义快捷键绑定
+// 可复制条目到 Cursor/VS Code 的 keybindings.json（支持 // 注释）
+// 安装扩展时会自动导入这些绑定
+
+[
+  {
+    // 在文件浏览器中定位当前文件
+    "key": "shift+cmd+e",
+    "command": "workbench.files.action.showActiveFileInExplorer"
+  },
+  {
+    // 全局搜索
+    "key": "alt+f",
+    "command": "workbench.action.findInFiles"
+  },
+  {
+    // 禁用默认的符号跳转快捷键
+    "key": "shift+cmd+o",
+    "command": "-workbench.action.gotoSymbol",
+    "when": "editorTextFocus"
+  },
+  {
+    // 快速打开文件
+    "key": "shift+cmd+o",
+    "command": "workbench.action.quickOpen"
+  },
+  {
+    // 切换到上一个编辑器标签页
+    "key": "shift+cmd+[",
+    "command": "workbench.action.previousEditor"
+  },
+  {
+    // 切换到下一个编辑器标签页
+    "key": "shift+cmd+]",
+    "command": "workbench.action.nextEditor"
+  },
+  {
+    // 非编辑区时复制文件路径
+    "key": "shift+cmd+c",
+    "command": "copyFilePath",
+    "when": "!editorFocus"
+  },
+  {
+    // 禁用默认的复制路径快捷键（让出给扩展命令）
+    "key": "alt+cmd+c",
+    "command": "-copyFilePath",
+    "when": "!editorFocus"
+  }
+]
