@@ -1,8 +1,9 @@
 {
   "name": "vhash-vscode-ext-v1",
   "displayName": "vHash",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "publisher": "vHash",
+  "icon": "icon.png",
   "repository": {
     "type": "git",
     "url": "https://example.com/local/vhash-vscode-ext.git"
