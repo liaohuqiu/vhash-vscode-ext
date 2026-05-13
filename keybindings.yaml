@@ -1,6 +1,11 @@
 # VHash Tools 快捷键配置（YAML 格式）
 # 此文件为 user 级设置，会覆盖 Cursor/VS Code 的系统默认快捷键
 # 安装扩展时会自动将这些绑定写入 keybindings.json
+#
+# 跨平台说明：
+#   - 扩展使用 "key"（Windows/Linux 默认）+ "mac"（macOS 覆盖）模式
+#   - macOS: cmd = Cmd, alt = Option
+#   - Windows/Linux: cmd = Win, alt = Alt
 
 - key: shift+cmd+e
   command: workbench.files.action.showActiveFileInExplorer
@@ -21,6 +26,12 @@
 - key: shift+cmd+]
   command: workbench.action.nextEditor
   # 切换到下一个编辑器标签页
+
+- key: shift+alt+c
+  mac: shift+cmd+c
+  command: vhashTools.copySelectionPathRange
+  when: editorTextFocus
+  # 复制文件路径与行号范围（macOS: Shift+Cmd+C / Win&Linux: Shift+Alt+C）
 
 - key: shift+cmd+c
   command: copyFilePath

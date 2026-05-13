@@ -4,9 +4,14 @@ Copy file paths with line ranges in VS Code / Cursor.
 
 ## Usage
 
-### Command
+### Shortcut
 
-Run `vHash: Copy Path With Line Range` from the command palette (`Shift+Cmd+P`), or press the default shortcut `Shift+Cmd+C` (when the editor is focused).
+| Platform | Shortcut |
+|---|---|
+| macOS | `Shift+Cmd+C` |
+| Windows / Linux | `Shift+Alt+C` |
+
+Or run `vHash: Copy Path With Line Range` from the command palette.
 
 ### Output
 
@@ -29,14 +34,29 @@ src/app.py:10-42
 
 ## Keybindings
 
-These custom keybindings are configured in `keybindings.yaml` / `keybindings.json` and auto-imported on install.
+These custom keybindings are defined in `keybindings.yaml` / `keybindings.json` and auto-imported on install.
 
 - `shift+cmd+e` — 在文件浏览器中定位当前文件
 - `alt+f` — 全局搜索
-- `shift+cmd+o` — 快速打开文件（同时禁用默认符号跳转）
+- `shift+cmd+o` — 快速打开文件
 - `shift+cmd+[` — 切换到上一个编辑器标签页
 - `shift+cmd+]` — 切换到下一个编辑器标签页
 - `shift+cmd+c` — 非编辑区时复制文件路径
-- `alt+cmd+c` — 禁用默认复制路径快捷键（让出给扩展命令）
+
+### Platform-specific keybinding
+
+VS Code extension 支持 `key`（Windows/Linux 默认）+ `mac`（macOS 覆盖）模式定义快捷键：
+
+```json
+{
+  "key": "shift+alt+c",
+  "mac": "shift+cmd+c",
+  "command": "vhashTools.copySelectionPathRange",
+  "when": "editorTextFocus"
+}
+```
+
+- macOS: `Cmd` 映射到 Mac 的 Command 键，`alt` 映射到 Option
+- Windows/Linux: `cmd` 映射到 Win 键，`alt` 映射到 Alt
 
 Copy the entries from `keybindings.json` into Cursor/VS Code's `keybindings.json` to configure manually.

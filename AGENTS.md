@@ -6,8 +6,9 @@
 
 ## 快捷键
 
-- 默认快捷键：`Shift+Cmd+V`
 - 命令 ID：`vhashTools.copySelectionPathRange`
+- macOS：`Shift+Cmd+C` / Windows & Linux：`Shift+Alt+C`
+- 扩展使用 `key`（Win/Linux 默认）+ `mac`（macOS 覆盖）模式
 
 ## 功能行为
 

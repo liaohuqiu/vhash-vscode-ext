@@ -1,7 +1,7 @@
 {
   "name": "vhash-vscode-ext-v2",
   "displayName": "vHash Copy Path",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "publisher": "vHash",
   "icon": "icon.png",
   "repository": {
@@ -28,7 +28,8 @@
     "keybindings": [
       {
         "command": "vhashTools.copySelectionPathRange",
-        "key": "shift+cmd+c",
+        "key": "shift+alt+c",
+        "mac": "shift+cmd+c",
         "when": "editorTextFocus"
       }
     ]
