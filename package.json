@@ -1,7 +1,7 @@
 {
   "name": "vhash-vscode-ext-v2",
   "displayName": "vHash Copy Path",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "publisher": "vHash",
   "icon": "icon.png",
   "repository": {
