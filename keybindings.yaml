@@ -3,37 +3,81 @@
 # 安装扩展时会自动将这些绑定写入 keybindings.json
 #
 # 跨平台说明：
-#   - 扩展使用 "key"（Windows/Linux 默认）+ "mac"（macOS 覆盖）模式
-#   - macOS: cmd = Cmd, alt = Option
-#   - Windows/Linux: cmd = Win, alt = Alt
+#   - package.json 使用 "key"（Windows/Linux 默认）+ "mac"（macOS 覆盖）模式
+#   - 用户 keybindings 使用 isMac / isWindows / isLinux when 条件
+#   - macOS 使用 Cmd，Windows/Linux 使用 Alt
 
 - key: shift+cmd+e
   command: workbench.files.action.showActiveFileInExplorer
+  when: isMac
   # 在文件浏览器中定位当前文件
+
+- key: shift+alt+e
+  command: workbench.files.action.showActiveFileInExplorer
+  when: isWindows || isLinux
+  # 在文件浏览器中定位当前文件
+
+- key: shift+cmd+f
+  command: workbench.action.findInFiles
+  when: isMac
+  # 全局搜索（macOS 提供两种方式）
 
 - key: alt+f
   command: workbench.action.findInFiles
+  when: isMac
+  # 全局搜索（macOS 提供两种方式）
+
+- key: shift+alt+f
+  command: workbench.action.findInFiles
+  when: isWindows || isLinux
   # 全局搜索
 
 - key: shift+cmd+o
   command: workbench.action.quickOpen
-  # 快速打开文件（覆盖默认的符号跳转）
+  when: isMac
+  # 快速打开文件
+
+- key: shift+alt+o
+  command: workbench.action.quickOpen
+  when: isWindows || isLinux
+  # 快速打开文件
 
 - key: shift+cmd+[
   command: workbench.action.previousEditor
+  when: isMac
+  # 切换到上一个编辑器标签页
+
+- key: shift+alt+[
+  command: workbench.action.previousEditor
+  when: isWindows || isLinux
   # 切换到上一个编辑器标签页
 
 - key: shift+cmd+]
   command: workbench.action.nextEditor
+  when: isMac
   # 切换到下一个编辑器标签页
 
-- key: shift+alt+c
-  mac: shift+cmd+c
+- key: shift+alt+]
+  command: workbench.action.nextEditor
+  when: isWindows || isLinux
+  # 切换到下一个编辑器标签页
+
+- key: shift+cmd+c
   command: vhashTools.copySelectionPathRange
-  when: editorTextFocus
-  # 复制文件路径与行号范围（macOS: Shift+Cmd+C / Win&Linux: Shift+Alt+C）
+  when: isMac && editorTextFocus
+  # 复制文件路径与行号范围
+
+- key: shift+alt+c
+  command: vhashTools.copySelectionPathRange
+  when: (isWindows || isLinux) && editorTextFocus
+  # 复制文件路径与行号范围
 
 - key: shift+cmd+c
   command: copyFilePath
-  when: "!editorFocus"
+  when: isMac && !editorFocus
+  # 非编辑区时复制文件路径
+
+- key: shift+alt+c
+  command: copyFilePath
+  when: (isWindows || isLinux) && !editorFocus
   # 非编辑区时复制文件路径
