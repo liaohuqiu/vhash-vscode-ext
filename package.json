@@ -6,7 +6,7 @@
   "icon": "icon.png",
   "repository": {
     "type": "git",
-    "url": "https://example.com/local/vhash-vscode-ext.git"
+    "url": "https://github.com/liaohuqiu/vhash-vscode-ext"
   },
   "engines": {
     "vscode": "^1.80.0"
