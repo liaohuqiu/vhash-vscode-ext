@@ -21,14 +21,8 @@
     "when": "isWindows || isLinux"
   },
   {
-    // 全局搜索（macOS 提供两种方式）
+    // 全局搜索
     "key": "shift+cmd+f",
-    "command": "workbench.action.findInFiles",
-    "when": "isMac"
-  },
-  {
-    // 全局搜索（macOS 提供两种方式）
-    "key": "alt+f",
     "command": "workbench.action.findInFiles",
     "when": "isMac"
   },
