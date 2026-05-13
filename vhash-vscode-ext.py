@@ -34,6 +34,33 @@ class PathInfo:
         self.cli = None
 
     def detect(self):
+        # Layout (macOS):
+        #   ~/Library/Application Support/{Cursor|Code}/User/
+        #   ├── settings.json            # 默认 profile 的设置
+        #   ├── keybindings.json         # 默认 profile 的快捷键
+        #   ├── extensions.json          # 默认 profile 的扩展清单
+        #   ├── globalStorage/
+        #   │   └── storage.json         # 所有命名 profile 的注册表（profileAssociations + userDataProfiles）
+        #   └── profiles/
+        #       └── {profile_id}/        # 命名 profile
+        #           ├── settings.json
+        #           ├── keybindings.json
+        #           └── extensions.json
+        #
+        # 默认 profile（__default__profile__）的 settings/keybindings 直接存在 User/ 下，
+        # 不需要 profiles/{id}/ 子目录。命名 profile 在 storage.json 中注册后由 profiles/{id}/ 管理。
+        #
+        # Profile 覆盖规则：命名 profile 继承默认 profile，可部分覆盖。既不在默认也不在命名 profile 的
+        # 键绑定，回退到扩展 contributed + VS Code 内置默认。
+        #
+        # Cursor:
+        #   user_data_dir     = ~/Library/Application Support/Cursor/User
+        #   profiles_dir      = ~/Library/Application Support/Cursor/User/profiles
+        #   extensions_dir    = ~/.cursor/extensions
+        # VS Code:
+        #   user_data_dir     = ~/Library/Application Support/Code/User
+        #   profiles_dir      = ~/Library/Application Support/Code/User/profiles
+        #   extensions_dir    = ~/.vscode/extensions
         cli = 'code'
         if self.install_for_cursor:
             user_data_dir = Path('~/Library/Application Support/Cursor/User').expanduser()
@@ -197,17 +224,15 @@ class App(functocli.BaseCliApp):
         logger.info('keybindings_updated=%s', sorted(updated_signatures))
         return new_items
 
+    def _load_jsonc_list(self, path):
+        text = path.read_text(encoding='utf-8')
+        items = json.loads('\n'.join(line for line in text.splitlines() if not line.strip().startswith('//')))
+        if not isinstance(items, list):
+            raise RuntimeError(f'jsonc file must be a list: {path}')
+        return items
+
     def _load_keybindings_from_agents(self):
-        return [
-            {'key': 'shift+cmd+e', 'command': 'workbench.files.action.showActiveFileInExplorer'},
-            {'key': 'alt+f', 'command': 'workbench.action.findInFiles'},
-            {'key': 'shift+cmd+o', 'command': '-workbench.action.gotoSymbol', 'when': 'editorTextFocus'},
-            {'key': 'shift+cmd+o', 'command': 'workbench.action.quickOpen'},
-            {'key': 'shift+cmd+[', 'command': 'workbench.action.previousEditor'},
-            {'key': 'shift+cmd+]', 'command': 'workbench.action.nextEditor'},
-            {'key': 'shift+cmd+c', 'command': 'copyFilePath', 'when': '!editorFocus'},
-            {'key': 'alt+cmd+c', 'command': '-copyFilePath', 'when': '!editorFocus'}
-        ]
+        return self._load_jsonc_list(self._ext_dir / 'keybindings.json')
 
     def _load_keybindings_file(self, keybindings_path):
         if not keybindings_path.exists():
