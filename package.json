@@ -1,7 +1,7 @@
 {
   "name": "vhash-vscode-ext-v2",
   "displayName": "vHash Copy Path",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "publisher": "vHash",
   "icon": "icon.png",
   "repository": {
@@ -27,10 +27,46 @@
     ],
     "keybindings": [
       {
+        "command": "workbench.action.showCommands",
+        "key": "shift+alt+p",
+        "mac": "shift+cmd+p"
+      },
+      {
+        "command": "workbench.files.action.showActiveFileInExplorer",
+        "key": "shift+alt+e",
+        "mac": "shift+cmd+e"
+      },
+      {
+        "command": "workbench.action.findInFiles",
+        "key": "shift+alt+f",
+        "mac": "shift+cmd+f"
+      },
+      {
+        "command": "workbench.action.quickOpen",
+        "key": "shift+alt+o",
+        "mac": "shift+cmd+o"
+      },
+      {
+        "command": "workbench.action.previousEditor",
+        "key": "shift+alt+[",
+        "mac": "shift+cmd+["
+      },
+      {
+        "command": "workbench.action.nextEditor",
+        "key": "shift+alt+]",
+        "mac": "shift+cmd+]"
+      },
+      {
         "command": "vhashTools.copySelectionPathRange",
         "key": "shift+alt+c",
         "mac": "shift+cmd+c",
         "when": "editorTextFocus"
+      },
+      {
+        "command": "copyFilePath",
+        "key": "shift+alt+c",
+        "mac": "shift+cmd+c",
+        "when": "!editorFocus"
       }
     ]
   },

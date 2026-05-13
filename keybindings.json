@@ -6,102 +6,89 @@
 //   - package.json 使用 "key"（Windows/Linux 默认）+ "mac"（macOS 覆盖）模式
 //   - 用户 keybindings 使用 isMac / isWindows / isLinux when 条件
 //   - macOS 使用 Cmd，Windows/Linux 使用 Alt
+//
+// 自定义快捷键现在定义在 package.json 的 contributes.keybindings 中，
+// 安装扩展即生效。此处保留平台特定写法，方便手动复制到用户 keybindings。
 
 [
   {
-    // 打开命令面板
+    "command": "workbench.action.showCommands",
     "key": "shift+cmd+p",
-    "command": "workbench.action.showCommands",
     "when": "isMac"
   },
   {
-    // 打开命令面板
+    "command": "workbench.action.showCommands",
     "key": "shift+alt+p",
-    "command": "workbench.action.showCommands",
     "when": "isWindows || isLinux"
   },
   {
-    // 在文件浏览器中定位当前文件
+    "command": "workbench.files.action.showActiveFileInExplorer",
     "key": "shift+cmd+e",
-    "command": "workbench.files.action.showActiveFileInExplorer",
     "when": "isMac"
   },
   {
-    // 在文件浏览器中定位当前文件
+    "command": "workbench.files.action.showActiveFileInExplorer",
     "key": "shift+alt+e",
-    "command": "workbench.files.action.showActiveFileInExplorer",
     "when": "isWindows || isLinux"
   },
   {
-    // 全局搜索
+    "command": "workbench.action.findInFiles",
     "key": "shift+cmd+f",
-    "command": "workbench.action.findInFiles",
     "when": "isMac"
   },
   {
-    // 全局搜索
+    "command": "workbench.action.findInFiles",
     "key": "shift+alt+f",
-    "command": "workbench.action.findInFiles",
     "when": "isWindows || isLinux"
   },
   {
-    // 快速打开文件
+    "command": "workbench.action.quickOpen",
     "key": "shift+cmd+o",
-    "command": "workbench.action.quickOpen",
     "when": "isMac"
   },
   {
-    // 快速打开文件
+    "command": "workbench.action.quickOpen",
     "key": "shift+alt+o",
-    "command": "workbench.action.quickOpen",
     "when": "isWindows || isLinux"
   },
   {
-    // 切换到上一个编辑器标签页
+    "command": "workbench.action.previousEditor",
     "key": "shift+cmd+[",
-    "command": "workbench.action.previousEditor",
     "when": "isMac"
   },
   {
-    // 切换到上一个编辑器标签页
+    "command": "workbench.action.previousEditor",
     "key": "shift+alt+[",
-    "command": "workbench.action.previousEditor",
     "when": "isWindows || isLinux"
   },
   {
-    // 切换到下一个编辑器标签页
-    "key": "shift+cmd+]",
     "command": "workbench.action.nextEditor",
+    "key": "shift+cmd+]",
     "when": "isMac"
   },
   {
-    // 切换到下一个编辑器标签页
-    "key": "shift+alt+]",
     "command": "workbench.action.nextEditor",
+    "key": "shift+alt+]",
     "when": "isWindows || isLinux"
   },
   {
-    // 复制文件路径与行号范围
-    "key": "shift+cmd+c",
     "command": "vhashTools.copySelectionPathRange",
+    "key": "shift+cmd+c",
     "when": "isMac && editorTextFocus"
   },
   {
-    // 复制文件路径与行号范围
-    "key": "shift+alt+c",
     "command": "vhashTools.copySelectionPathRange",
+    "key": "shift+alt+c",
     "when": "(isWindows || isLinux) && editorTextFocus"
   },
   {
-    // 非编辑区时复制文件路径
-    "key": "shift+cmd+c",
     "command": "copyFilePath",
+    "key": "shift+cmd+c",
     "when": "isMac && !editorFocus"
   },
   {
-    // 非编辑区时复制文件路径
-    "key": "shift+alt+c",
     "command": "copyFilePath",
+    "key": "shift+alt+c",
     "when": "(isWindows || isLinux) && !editorFocus"
   }
 ]
