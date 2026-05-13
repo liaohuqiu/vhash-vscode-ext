@@ -36,6 +36,7 @@ src/app.py:10-42
 
 These custom keybindings are defined in `keybindings.json` and auto-imported on install.
 
+- `Shift+Cmd+P` / `Shift+Alt+P` — 打开命令面板
 - `Shift+Cmd+E` / `Shift+Alt+E` — 在文件浏览器中定位当前文件
 - `Shift+Cmd+F` — Mac 全局搜索 / `Shift+Alt+F` — Win&Linux 全局搜索
 - `Shift+Cmd+O` / `Shift+Alt+O` — 快速打开文件

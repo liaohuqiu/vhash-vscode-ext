@@ -9,6 +9,18 @@
 
 [
   {
+    // 打开命令面板
+    "key": "shift+cmd+p",
+    "command": "workbench.action.showCommands",
+    "when": "isMac"
+  },
+  {
+    // 打开命令面板
+    "key": "shift+alt+p",
+    "command": "workbench.action.showCommands",
+    "when": "isWindows || isLinux"
+  },
+  {
     // 在文件浏览器中定位当前文件
     "key": "shift+cmd+e",
     "command": "workbench.files.action.showActiveFileInExplorer",
