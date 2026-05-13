@@ -34,7 +34,7 @@ src/app.py:10-42
 
 ## Keybindings
 
-These custom keybindings are defined in `keybindings.yaml` / `keybindings.json` and auto-imported on install.
+These custom keybindings are defined in `keybindings.json` and auto-imported on install.
 
 - `Shift+Cmd+E` / `Shift+Alt+E` — 在文件浏览器中定位当前文件
 - `Shift+Cmd+F` — Mac 全局搜索 / `Shift+Alt+F` — Win&Linux 全局搜索
@@ -43,9 +43,19 @@ These custom keybindings are defined in `keybindings.yaml` / `keybindings.json` 
 - `Shift+Cmd+]` / `Shift+Alt+]` — 切换到下一个编辑器标签页
 - `Shift+Cmd+C` / `Shift+Alt+C` — 复制文件路径与行号范围，或非编辑区复制文件路径
 
+### Keybinding priority
+
+系统级 → 扩展 contributed → 用户级，后者覆盖前者：
+
+| Priority | Source | Overrides |
+|---|---|---|
+| Highest | User `keybindings.json` | Everything below |
+| Medium | Extension `package.json` `contributes.keybindings` | VS Code defaults |
+| Lowest | VS Code built-in defaults | — |
+
 ### Platform-specific keybinding
 
-`package.json` extension contribution 使用 `key`（Windows/Linux 默认）+ `mac`（macOS 覆盖）模式定义默认快捷键：
+`package.json` extension contribution 使用 `key`（Windows/Linux 默认）+ `mac`（macOS 覆盖）模式：
 
 ```json
 {
@@ -56,7 +66,7 @@ These custom keybindings are defined in `keybindings.yaml` / `keybindings.json` 
 }
 ```
 
-用户级 `keybindings.json` / `keybindings.yaml` 使用 `isMac`、`isWindows`、`isLinux` when 条件，便于直接复制到 Cursor/VS Code：
+用户级 `keybindings.json` 使用 `isMac`、`isWindows`、`isLinux` when 条件：
 
 ```json
 {

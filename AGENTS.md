@@ -8,7 +8,8 @@
 
 - 命令 ID：`vhashTools.copySelectionPathRange`
 - macOS：`Shift+Cmd+C` / Windows & Linux：`Shift+Alt+C`
-- 扩展使用 `key`（Win/Linux 默认）+ `mac`（macOS 覆盖）模式
+- `package.json` 使用 `key`（Win/Linux 默认）+ `mac`（macOS 覆盖）模式
+- 用户 keybindings 使用 `isMac` / `isWindows` / `isLinux` when 条件
 
 ## 功能行为
 
@@ -32,11 +33,11 @@
 ## 使用方法
 
 1. 在编辑器中选中代码（或只放置光标）。
-2. 运行命令 `VHash: Copy Path With Line Range`，或直接按 `Shift+Cmd+V`。
+2. 运行命令 `VHash: Copy Path With Line Range`，或直接按默认快捷键。
 
 ## keybinding
 
-自定义快捷键列表见 `keybindings.yaml`（易读）或 `keybindings.json`（可直接用于 Cursor/VS Code 的 keybindings.json），安装扩展时会自动导入。
+自定义快捷键列表见 `keybindings.json`，安装扩展时会自动导入到 Cursor/VS Code 的用户 keybindings。
 
 ## 发布 Token
 
