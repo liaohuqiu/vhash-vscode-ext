@@ -34,7 +34,7 @@
 ## 4. 示例输出
 
 - `src/app.py:10-42`
-- `/Users/liaohuqiu/.../vhash-vscode-ext/AGENTS.md:20-20`
+- `AGENTS.md:20-20`
 
 ## 5. 本地安装（Cursor / VS Code）
 
@@ -54,17 +54,22 @@
 
 快捷键优先级：用户 keybindings > 扩展 contributed > VS Code 内置，见 `README.md` 2.2。
 
-## 8. 发布 Token
+## 8. 配置发布 Token
 
-Token 写入 `~/.config/cpbox/cpbox-user.env`（用户级配置，不提交到仓库）：
+Token 写入 xapp config root 的 app secret profile，不提交到仓库：
 
+```yaml
+# ~/.config/xapp-config/xapp-keys/apps/vhash-vscode-ext/vhash-vscode-ext-secrets.yml
+publish:
+  default_profile: default
+  profiles:
+    default:
+      azure_devops_pat_for_vsce: <your-azure-pat>
+      openvsx_pat: <your-openvsx-pat>
 ```
-AZURE_DEVOPS_PAT_FOR_VSCE=<your-azure-pat>
-OPENVSX_PAT=<your-openvsx-pat>
-```
 
-- `AZURE_DEVOPS_PAT_FOR_VSCE`：VS Code Marketplace 发布，https://dev.azure.com/liaohuqiu/_usersSettings/tokens
-- `OPENVSX_PAT`：OpenVSX (Cursor) 发布，https://open-vsx.org/user-settings/tokens
+- `azure_devops_pat_for_vsce`：VS Code Marketplace 发布，https://dev.azure.com/liaohuqiu/_usersSettings/tokens
+- `openvsx_pat`：OpenVSX (Cursor) 发布，https://open-vsx.org/user-settings/tokens
 
 ## 9. 发布注意事项
 
