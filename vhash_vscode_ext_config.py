@@ -8,7 +8,7 @@ PUBLISH_SECTION = 'publish'
 
 class VhashVscodeExtConfig:
     def __init__(self, profile=''):
-        config = xapp_contracts.load_system_user_config_file(CONFIG_FILE)
+        config = xapp_contracts.load_layered_config_file(CONFIG_FILE)
         _, self._publish_profile = profiles.select_profile_from_config(config[PUBLISH_SECTION], profile=profile)
 
     def azure_devops_pat_for_vsce(self):
