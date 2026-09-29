@@ -2,7 +2,7 @@ from cpbox.app import xapp_contracts
 from cpbox.xkit.tools import profiles
 
 
-CONFIG_FILE = 'xapp-keys/apps/vhash-vscode-ext/vhash-vscode-ext-secrets.yml'
+CONFIG_FILE = 'xapp-keys/vhash-vscode-ext/vhash-vscode-ext-secrets.yml'
 PUBLISH_SECTION = 'publish'
 
 
@@ -12,7 +12,7 @@ class VhashVscodeExtConfig:
         _, self._publish_profile = profiles.select_profile_from_config(config[PUBLISH_SECTION], profile=profile)
 
     def azure_devops_pat_for_vsce(self):
-        return self._publish_profile.required_str('azure_devops_pat_for_vsce')
+        return self._publish_profile.get_str('azure_devops_pat_for_vsce', strict=True)
 
     def openvsx_pat(self):
-        return self._publish_profile.required_str('openvsx_pat')
+        return self._publish_profile.get_str('openvsx_pat', strict=True)

@@ -1,7 +1,7 @@
 {
   "name": "vhash-vscode-ext-v2",
   "displayName": "vHash Copy Path",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "publisher": "vHash",
   "icon": "icon.png",
   "repository": {
@@ -15,14 +15,29 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:vhashTools.copySelectionPathRange"
+    "onCommand:vhashTools.copySelectionPathRange",
+    "onCommand:vhashTools.copyPathRelativeToHome",
+    "onCommand:vhashTools.copyFileOrDirectoryName",
+    "onCommand:vhashTools.configureVimKeybindings"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "vhashTools.copySelectionPathRange",
-        "title": "VHash: Copy Path With Line Range"
+        "title": "vHash: Copy Path With Line Range"
+      },
+      {
+        "command": "vhashTools.copyPathRelativeToHome",
+        "title": "vHash: Copy Path Relative to Home"
+      },
+      {
+        "command": "vhashTools.copyFileOrDirectoryName",
+        "title": "vHash: Copy File or Directory Name"
+      },
+      {
+        "command": "vhashTools.configureVimKeybindings",
+        "title": "vHash: Configure Vim Keybindings"
       }
     ],
     "keybindings": [
@@ -67,14 +82,48 @@
         "key": "shift+alt+c",
         "mac": "shift+cmd+c",
         "when": "!editorFocus"
+      },
+      {
+        "command": "vhashTools.copySelectionPathRange",
+        "key": "ctrl+k n",
+        "mac": "cmd+k n",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "vhashTools.copyPathRelativeToHome",
+        "key": "ctrl+k h",
+        "mac": "cmd+k h",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "vhashTools.copyFileOrDirectoryName",
+        "key": "ctrl+k f",
+        "mac": "cmd+k f",
+        "when": "editorTextFocus"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "vhashTools.copyPathRelativeToHome",
+          "when": "resourceScheme == file",
+          "group": "navigation@90"
+        },
+        {
+          "command": "vhashTools.copyFileOrDirectoryName",
+          "when": "resourceScheme == file",
+          "group": "navigation@91"
+        }
+      ]
+    }
   },
   "scripts": {
     "compile": "tsc -p ./",
+    "test": "npm run compile && node --test test/*.test.js",
     "vscode:prepublish": "npm run compile"
   },
   "devDependencies": {
+    "@types/node": "16.x",
     "@types/vscode": "^1.80.0",
     "typescript": "^5.3.3"
   }

@@ -7,7 +7,7 @@
     "sourceMap": true,
     "strict": true,
     "lib": ["ES2020"],
-    "types": ["vscode"]
+    "types": ["node", "vscode"]
   },
   "include": ["src"]
 }

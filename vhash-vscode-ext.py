@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-vhash-vscode-ext.py - CLI for building and reinstalling VHash VSCode extension.
+vhash-vscode-ext.py - CLI for building and reinstalling vHash VSCode extension.
 ---
-VHash VSCode 扩展构建与重装命令行工具。
+vHash VSCode 扩展构建与重装命令行工具。
 """
 
 import json
@@ -12,12 +12,20 @@ import subprocess
 import time
 from pathlib import Path
 
-from cpbox.app.rootcontext import gcontext
 from cpbox.tool import functocli
 from cpbox.tool import serde
 
+import vhash_vscode_ext_config
+
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 logger = logging.getLogger()
+
+MANAGED_COPY_CHORD_KEYS = {'cmd+k n', 'cmd+k h', 'cmd+k f', 'ctrl+k n', 'ctrl+k h', 'ctrl+k f'}
+VIM_COPY_BINDINGS = [
+    {'before': [',', 'c', 'n'], 'commands': ['vhashTools.copySelectionPathRange']},
+    {'before': [',', 'c', 'h'], 'commands': ['vhashTools.copyPathRelativeToHome']},
+    {'before': [',', 'c', 'f'], 'commands': ['vhashTools.copyFileOrDirectoryName']}
+]
 
 
 class PathInfo:
@@ -146,10 +154,10 @@ class PathInfo:
         return f'"{self.cli}"' if self.cli else 'code'
 
 
-class App(functocli.BaseCliApp):
+class App(functocli.BaseXAppCli):
 
     def __init__(self, install_for_cursor=True, install_for_default_profile=True):
-        functocli.BaseCliApp.__init__(self, 'vhash-vscode-ext')
+        functocli.BaseXAppCli.__init__(self, 'vhash-vscode-ext')
         self._ext_dir = Path(__file__).resolve().parent
         self.path_info = PathInfo(
             ext_dir=self._ext_dir,
@@ -208,10 +216,19 @@ class App(functocli.BaseCliApp):
         def signature(item):
             return (item.get('key'), item.get('command'), item.get('when'))
 
+        kept_items = []
+        removed_items = []
+        for item in items:
+            key = str(item.get('key') or '').strip().lower()
+            if key in MANAGED_COPY_CHORD_KEYS:
+                removed_items.append(item)
+            else:
+                kept_items.append(item)
+
         binding_by_signature = {signature(item): item for item in bindings}
         updated_signatures = set()
         new_items = []
-        for item in items:
+        for item in kept_items:
             item_signature = signature(item)
             if item_signature in binding_by_signature:
                 new_items.append(binding_by_signature[item_signature])
@@ -221,6 +238,7 @@ class App(functocli.BaseCliApp):
         for binding in bindings:
             if signature(binding) not in updated_signatures:
                 new_items.append(binding)
+        logger.info('keybinding_conflicts_removed=%s', removed_items)
         logger.info('keybindings_updated=%s', sorted(updated_signatures))
         return new_items
 
@@ -263,19 +281,18 @@ class App(functocli.BaseCliApp):
         if settings is None:
             raise RuntimeError(f'failed to load settings json: {settings_path}')
 
-        binding = {
-            'before': [',', 'c', 'n'],
-            'commands': ['vhashTools.copySelectionPathRange']
-        }
-
         normal_key = 'vim.normalModeKeyBindingsNonRecursive'
         visual_key = 'vim.visualModeKeyBindingsNonRecursive'
 
         normal_list = settings.get(normal_key, [])
         visual_list = settings.get(visual_key, [])
 
-        settings[normal_key] = self._upsert_keybinding(normal_list, binding)
-        settings[visual_key] = self._upsert_keybinding(visual_list, binding)
+        for binding in VIM_COPY_BINDINGS:
+            normal_list = self._upsert_keybinding(normal_list, binding)
+            visual_list = self._upsert_keybinding(visual_list, binding)
+
+        settings[normal_key] = normal_list
+        settings[visual_key] = visual_list
 
         serde.dump_json_file(settings_path, settings)
         logger.info('bind done: %s', settings_path)
@@ -289,6 +306,12 @@ class App(functocli.BaseCliApp):
         for profile in profiles:
             logger.info('import_keybindings_profile: %s', profile['name'])
             self._import_keybindings_for_path(profile['keybindings_path'])
+
+    def configure_vim_keybindings(self, include_default=True):
+        profiles = self.path_info.list_all_profiles(include_default=include_default)
+        for profile in profiles:
+            logger.info('configure_vim_keybindings_profile: %s', profile['name'])
+            self._bind_vim_key_for_settings_path(profile['settings_path'])
 
     def _upsert_profile_extension(self, extensions_path, package_info):
         ext_id = package_info['extension_id']
@@ -400,17 +423,15 @@ class App(functocli.BaseCliApp):
         self.uninstall()
         self.setup_all_profiles()
 
-    def publish_for_vscode(self, vsix_path=None):
-        gcontext.try_enable_framework_mode()
-        token = gcontext.env_config.required_str('AZURE_DEVOPS_PAT_FOR_VSCE')
+    def publish_for_vscode(self, vsix_path=None, profile=''):
+        token = vhash_vscode_ext_config.VhashVscodeExtConfig(profile=profile).azure_devops_pat_for_vsce()
         cmd = f'npx @vscode/vsce publish -p {token}'
         if vsix_path:
             cmd += f' --packagePath {vsix_path}'
         self._run(cmd)
 
-    def publish_for_cursor(self, vsix_path=None):
-        gcontext.try_enable_framework_mode()
-        token = gcontext.env_config.required_str('OPENVSX_PAT')
+    def publish_for_cursor(self, vsix_path=None, profile=''):
+        token = vhash_vscode_ext_config.VhashVscodeExtConfig(profile=profile).openvsx_pat()
         cmd = f'npx ovsx publish -p {token}'
         if vsix_path:
             cmd += f' {vsix_path}'

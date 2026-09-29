@@ -1,4 +1,4 @@
-# VHash Tools 说明
+# vHash Tools 说明
 
 ## 0. 范围与维护
 
@@ -16,41 +16,53 @@
 
 ## 1. 命令
 
-- `VHash: Copy Path With Line Range`
-- 命令 ID：`vhashTools.copySelectionPathRange`
+- `vhashTools.copySelectionPathRange` / `vHash: Copy Path With Line Range`：复制活动文件的绝对路径与行号范围。
+- `vhashTools.copyPathRelativeToHome` / `vHash: Copy Path Relative to Home`：复制相对于 extension host 用户 home 的路径。
+- `vhashTools.copyFileOrDirectoryName` / `vHash: Copy File or Directory Name`：复制文件或目录名。
+- `vhashTools.configureVimKeybindings` / `vHash: Configure Vim Keybindings`：配置当前 profile 的 VSCodeVim mappings。
 
 ## 2. 快捷键
 
-- macOS：`Shift+Cmd+C` / Windows & Linux：`Shift+Alt+C`
+- 路径与行号：macOS `Shift+Cmd+C` 或 `Cmd+K N` / Windows & Linux `Shift+Alt+C` 或 `Ctrl+K N` / VSCodeVim `, c n`。
+- 相对 home 的路径：macOS `Cmd+K H` / Windows & Linux `Ctrl+K H` / VSCodeVim `, c h`。
+- 文件名：macOS `Cmd+K F` / Windows & Linux `Ctrl+K F` / VSCodeVim `, c f`。
 - `package.json` 使用 `key`（Win/Linux 默认）+ `mac`（macOS 覆盖）模式
 - 用户 keybindings 使用 `isMac` / `isWindows` / `isLinux` when 条件
+- 扩展通过 `contributes.keybindings` 提供默认规则，不直接修改用户 `keybindings.json`；Python importer 只管理 `Cmd/Ctrl+K N/H/F` 六个精确 chord，不清理其他 `Cmd/Ctrl+K` chord。
 
 ## 3. 功能行为
 
 - 复制当前文件的路径与行号范围，格式为 `path.py:start-end`（可为相对或绝对路径）。
 - 如果没有选区，则使用光标所在行，起止行相同。
 - 如果选区结束位置在下一行第 0 列，则结束行会减 1，避免多算空行。
+- Explorer 右键菜单支持文件、目录和多选资源；多选结果每行一个。
+- home-relative 路径基于 extension host 的 `os.homedir()`；home 外资源和非 `file` URI 不写剪贴板。
+- Marketplace/VSIX 安装必须独立提供扩展命令、原生快捷键和 Vim 配置入口，不依赖 Python CLI。
+- `configureVimKeybindings` 只更新当前 profile 的 `vim.normalModeKeyBindingsNonRecursive` 和 `vim.visualModeKeyBindingsNonRecursive`，并只管理 `, c n`、`, c h`、`, c f`。
 
 ## 4. 示例输出
 
 - `src/app.py:10-42`
 - `AGENTS.md:20-20`
+- `git/project/src/app.py`
+- `app.py`
 
 ## 5. 本地安装（Cursor / VS Code）
 
-1. 在本目录打开终端。
-2. 执行 `npm install`。
-3. 执行 `npm run compile`。
-4. `Shift+Cmd+P` 打开命令面板，输入 `Extensions: Install from VSIX`，选择当前目录（或对应 `.vsix` 文件）。
+1. 在本目录运行 `npm ci` 和 `npm test`。
+2. 使用 VS Code 或 Cursor 打开仓库，按 `F5` 启动 `Run vHash Extension` 并完成开发验证。
+3. 执行 `npx @vscode/vsce package` 生成 VSIX。
+4. 分别用 `cursor --install-extension <vsix> --force` 和 `code --install-extension <vsix> --force` 安装。
 
 ## 6. 使用方法
 
-1. 在编辑器中选中代码（或只放置光标）。
-2. 运行命令 `VHash: Copy Path With Line Range`，或直接按默认快捷键。
+1. 在编辑器中使用命令面板、原生快捷键或 Vim mapping。
+2. 在 Explorer 中通过右键菜单复制文件或目录的 home-relative 路径和名称。
+3. 安装后在每个使用的 profile 中运行一次 `vHash: Configure Vim Keybindings`。
 
 ## 7. 快捷键配置
 
-自定义快捷键列表见 `keybindings.json`，安装扩展时自动导入到 Cursor/VS Code 的用户 keybindings。
+扩展默认快捷键维护在 `package.json`；`keybindings.json` 供 Python importer 同步本机用户 profile。
 
 快捷键优先级：用户 keybindings > 扩展 contributed > VS Code 内置，见 `README.md` 2.2。
 
@@ -59,7 +71,7 @@
 Token 写入 xapp config root 的 app secret profile，不提交到仓库：
 
 ```yaml
-# ~/.config/xapp-config/xapp-keys/apps/vhash-vscode-ext/vhash-vscode-ext-secrets.yml
+# ~/.config/xapp-config-root/xapp-keys/vhash-vscode-ext/vhash-vscode-ext-secrets.yml
 publish:
   default_profile: default
   profiles:

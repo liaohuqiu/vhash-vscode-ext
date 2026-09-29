@@ -1,0 +1,5 @@
+project_slug: vhash-vscode-ext
+
+xenv:
+  conda:
+    default_env_name: cpbox-test
