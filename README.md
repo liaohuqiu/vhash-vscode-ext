@@ -4,7 +4,7 @@
 
 ### 0.1 目标
 
-本文档说明 vHash VS Code/Cursor 扩展的功能、快捷键配置和使用方式。
+本文档说明 vHash VS Code/Cursor 扩展的功能、快捷键配置、开发验证、本地安装和发布流程。
 
 ### 0.2 编写与维护规则
 
@@ -133,3 +133,122 @@ code --install-extension ./vhash-vscode-ext-v2-<version>.vsix --force
   "when": "(isWindows || isLinux) && editorTextFocus"
 }
 ```
+
+## 5. 发布扩展
+
+### 5.1 使用统一发布流程
+
+扩展通过本地 Python xapp CLI 发布：
+
+1. 从 `xapp-keys` 加载 VS Code Marketplace 和 Open VSX token。
+2. 从已提交并推送的源码生成一个 VSIX。
+3. 在 VS Code 和 Cursor 中安装并验证该 VSIX。
+4. 把同一个 VSIX 分别发布到 VS Code Marketplace 和 Open VSX。
+5. 从两个公开目录回读并确认新版本。
+
+当前流程不创建 Git tag，不创建 GitHub Release，也不使用 GitHub Actions 发布。Marketplace 和 VSIX 用户不需要 Python、`xenv` 或 `xapp-keys`；这些工具只供仓库维护者使用，并且不会打包进扩展。
+
+### 5.2 配置发布凭证
+
+发布凭证保存在用户的 xapp config root，不提交到仓库：
+
+```yaml
+# ~/.config/xapp-config-root/xapp-keys/vhash-vscode-ext/vhash-vscode-ext-secrets.yml
+publish:
+  default_profile: default
+  profiles:
+    default:
+      azure_devops_pat_for_vsce: <your-azure-pat>
+      openvsx_pat: <your-openvsx-token>
+```
+
+- `azure_devops_pat_for_vsce`：用于发布到 VS Code Marketplace。
+- `openvsx_pat`：用于发布到 Open VSX，供 Cursor 用户安装。
+
+仓库中的示例文件位于 `assets/xapp-keys-sample/vhash-vscode-ext/vhash-vscode-ext-secrets.sample.yml`。
+
+### 5.3 验证并提交源码
+
+1. 更新 `package.json` 和 `package-lock.json` 中的版本号。
+2. 运行自动测试和 diff 检查：
+
+```bash
+npm ci
+npm test
+git diff --check
+```
+
+3. 使用 `git status --short` 检查变更，只暂存当前版本需要发布的文件，不提交 `output/`、`dist/`、`node_modules/`、VSIX 或用户凭证。
+4. 检查 staged diff，然后提交并推送：
+
+```bash
+git diff --cached --check
+git diff --cached --stat
+git commit -m "release: v<version>, <summary>"
+git push origin main
+```
+
+### 5.4 生成并验证唯一 VSIX
+
+从已经提交并推送的源码生成发布包：
+
+```bash
+release_version="$(node -p "require('./package.json').version")"
+release_vsix="$PWD/vhash-vscode-ext-v2-${release_version}.vsix"
+
+npx @vscode/vsce package --out "$release_vsix"
+unzip -l "$release_vsix"
+shasum -a 256 "$release_vsix"
+```
+
+VSIX 应包含扩展 manifest、`package.json`、`README.md`、图标和编译后的 `dist/`。发布前确认它不包含 Python CLI、`xapp-keys`、测试文件、`output/` 或本地开发配置。
+
+在两个编辑器中安装同一个 VSIX：
+
+```bash
+code --install-extension "$release_vsix" --force
+cursor --install-extension "$release_vsix" --force
+```
+
+验证命令面板、原生快捷键、VSCodeVim mappings、Explorer 文件/目录菜单、多选资源和 home 外路径处理。
+
+### 5.5 发布同一个 VSIX
+
+使用 `xenv` 的 `tool-python` runtime 调用发布 CLI：
+
+```bash
+xenv pyrun --runtime tool-python python vhash-vscode-ext.py \
+  publish-for-vscode \
+  --vsix-path "$release_vsix"
+
+xenv pyrun --runtime tool-python python vhash-vscode-ext.py \
+  publish-for-cursor \
+  --vsix-path "$release_vsix"
+```
+
+两个 Marketplace 必须使用同一个 VSIX，确保公开版本内容一致。不要把 token 写入命令、日志、仓库文件或 VSIX。
+
+### 5.6 回读公开版本
+
+发布后等待 Marketplace 完成索引，然后检查：
+
+- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=vHash.vhash-vscode-ext-v2)
+- [Open VSX](https://open-vsx.org/extension/vHash/vhash-vscode-ext-v2)
+
+也可以通过命令回读版本：
+
+```bash
+npx @vscode/vsce show vHash.vhash-vscode-ext-v2 --json |
+  python3 -c 'import json, sys; data = json.load(sys.stdin); print(data["versions"][0]["version"])'
+
+curl -fsSL https://open-vsx.org/api/vHash/vhash-vscode-ext-v2 |
+  python3 -c 'import json, sys; print(json.load(sys.stdin)["version"])'
+```
+
+最后从两个公开 Marketplace 安装扩展并完成一次验证，不使用本地 VSIX 代替公开版本验收。
+
+### 5.7 处理部分发布失败
+
+- 只有一个 Marketplace 发布失败时，使用同一个 VSIX重试失败的平台。
+- Marketplace 版本不可覆盖；如果已发布的 VSIX 本身有问题，修复后增加 patch 版本。
+- 发布命令成功但公开目录仍显示旧版本时，先等待索引传播，再重新回读，不要立即重复发布。
